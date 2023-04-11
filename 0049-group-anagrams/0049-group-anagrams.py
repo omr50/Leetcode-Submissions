@@ -1,25 +1,32 @@
 class Solution:
     def groupAnagrams(self, strs: List[str]) -> List[List[str]]:
         
-        def count26(n):
-            li = [0] * 26
-            for i in n:
-                li[ord(i) - ord('a')] += 1
-            return li
-        d1 = {}
-        for i in strs:
-            li = count26(i)
-            x = tuple(li)
-            if x in d1:
-                d1[x].append(i)
+        def produceCountArray(word):
+            # return a tuple (array isnt hashable (mutable))
+            # which contains the count of all 26 letters.
+            # Therefore anagrams should have the same count
+            # with an identical tuple. Can use the tuple to hash
+            # them together.  key : value -> tuple : [list of anagrams]
+        
+            arr = [0] * 26
+            
+            for char in word:
+                arr[ord(char) - ord('a')] += 1
+            
+            return tuple(arr)
+        
+        # hash set which has tuple mapped to list of anagrams
+        hashset = {}
+        for word in strs:
+            currTuple = produceCountArray(word)
+            if currTuple in hashset:
+                hashset[currTuple].append(word)
             else:
-                d1[x] = []
-                d1[x].append(i)
-        return d1.values()
+                hashset[currTuple] = [word]
         
-        
-        
-        
+        return hashset.values()
+            
+            
         
         
         
